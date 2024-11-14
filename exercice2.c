@@ -62,7 +62,7 @@ int main()
         // Code pour dessiner les formes géométriques ici
         // ===========================
 
-        al_draw_filled_circle(320, 240, 50, al_map_rgb(255, 0, 0)); // Cercle rouge au centre
+     
 
         // ===========================
         // Code pour dessiner les formes géométriques ici
