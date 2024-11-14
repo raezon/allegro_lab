@@ -43,7 +43,7 @@ int main()
         {
             if (ev.mouse.button == 1)
             {
-                is_text_visible = !is_text_visible;
+
                 start_time = al_get_time(); // Démarre ou redémarre le chronomètre
             }
         }
@@ -51,17 +51,9 @@ int main()
         // Efface l'écran
         al_clear_to_color(al_map_rgb(0, 0, 0));
 
-        // Affiche du texte si is_text_visible est vrai
-        if (is_text_visible)
-        {
-            al_draw_text(font, al_map_rgb(255, 255, 255), 320, 240, ALLEGRO_ALIGN_CENTRE, "Clic détecté !");
-        }
-
         // ===========================
         // Code pour dessiner les formes géométriques ici
         // ===========================
-
-        al_draw_filled_circle(320, 240, 50, al_map_rgb(255, 0, 0)); // Cercle rouge au centre
 
         // ===========================
         // Code pour dessiner les formes géométriques ici
