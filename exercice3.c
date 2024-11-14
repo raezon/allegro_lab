@@ -1,45 +1,86 @@
 #include <allegro5/allegro.h>            // Core Allegro functions
 #include <allegro5/allegro_primitives.h> // For drawing shapes (rectangle, circle, triangle, etc.)
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include <stdio.h>
+#include <stdbool.h>
 
-// Fonction pour dessiner la matrice de morpion 3x3 avec les bords fermés
-void draw_tic_tac_toe_grid(int x, int y, int cell_size)
-{
-}
+ALLEGRO_DISPLAY *menu_display;
 
 int main()
 {
-    // Initialiser Allegro et les add-ons
-    if (!al_init())
-    {
-        fprintf(stderr, "Erreur : Impossible d'initialiser Allegro.\n");
-        return -1;
-    }
-    al_init_primitives_addon(); // Initialise les primitives Allegro
+    // variables
+    bool is_text_visible = false;
 
-    // Crée la fenêtre d'affichage
-    ALLEGRO_DISPLAY *display = al_create_display(640, 480);
+    // Initialiser Allegro et les add-ons
+    al_init();                  // Initialise la bibliothèque Allegro
+    al_install_mouse();         // Installe la gestion de la souris
+    al_init_primitives_addon(); // Initializes the Allegro primitives add-on
+
+    ALLEGRO_DISPLAY *display = al_create_display(640, 480);             // Crée la fenêtre d'affichage
+    ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();         // Crée une file d'événements
+    al_register_event_source(event_queue, al_get_mouse_event_source()); // Enregistre les événements de souris
     if (!display)
     {
-        fprintf(stderr, "Erreur : Impossible de créer l'affichage.\n");
+        fprintf(stderr, "Erreur : Impossible de créer l’affichage.\n");
         return -1;
     }
 
-    // Efface l'écran
-    al_clear_to_color(al_map_rgb(0, 0, 0)); // Fond noir
+    // Charger la police de caractères
+    ALLEGRO_FONT *font = al_create_builtin_font();
+    if (!font)
+    {
+        fprintf(stderr, "Erreur : Impossible de charger la police.\n");
+        return -1;
+    }
 
-    // Dessiner la matrice de morpion (3x3)
-    int cell_size = 100;                        // Taille des cellules du morpion
-    draw_tic_tac_toe_grid(220, 140, cell_size); // Dessine la grille 3x3 à la position (220, 140)
+    double start_time = 0; // Temps de début pour le chronomètre
 
-    // Met à jour l'affichage
-    al_flip_display();
+    while (true)
+    {
+        ALLEGRO_EVENT ev;
+        al_wait_for_event(event_queue, &ev);
 
-    // Attendre 5 secondes avant de fermer
-    al_rest(5.0);
+        // Vérifie si un clic de souris a eu lieu
+        if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+        {
+            if (ev.mouse.button == 1)
+            {
+                is_text_visible = !is_text_visible;
+                start_time = al_get_time(); // Démarre ou redémarre le chronomètre
+            }
+        }
 
-    // Détruire l'affichage
+        // Efface l'écran
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+        // Affiche du texte si is_text_visible est vrai
+        if (is_text_visible)
+        {
+            al_draw_text(font, al_map_rgb(255, 255, 255), 320, 240, ALLEGRO_ALIGN_CENTRE, "Clic détecté !");
+        }
+
+        // ===========================
+        // Code pour dessiner les formes géométriques ici
+        // ===========================
+
+        // ===========================
+        // Code pour dessiner les formes géométriques ici
+        // ===========================
+
+        // Met à jour l'affichage
+        al_flip_display();
+
+        // Si 10 secondes se sont écoulées, fermez la fenêtre
+        if (al_get_time() - start_time > 10)
+        {
+            break; // Sort de la boucle
+        }
+    }
+
+    // Détruire l'affichage et la file d'événements
     al_destroy_display(display);
+    al_destroy_event_queue(event_queue);
 
     return 0;
 }
